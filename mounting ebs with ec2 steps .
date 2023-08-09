@@ -1,0 +1,48 @@
+
+apt-get install lvm2 -y
+92  pvs
+   93  vgs
+   94  lvs
+   95  pvcreate /dev/xvdf
+   96  pvs
+   97  vgcreate vg_nit /dev/xvdf
+   98  vgs
+   99  lvs
+  100  lvcreate -l 100%FREE -n lv_nit vg_nit
+  101  lvs
+  102  lsblk
+  103  mkfs.xfs /dev/vg_nit/lv_nit
+  104  lsblk
+  105  lsblk -f
+  106  blkid
+  107  vim /etc/fstab
+  108  mkdir /data
+  109  mount -a
+  110  lablk
+  111  lsblk
+  112  mkdir /data/summit
+  113  ll
+  114  ll /
+  115  cd /data/
+  116  ll
+  117  reboot
+  118  lsblk
+  119  cd /data
+  120  ll
+  121  cd
+  122  history
+  123  lvcreate --help
+  124  vim /etc/fstab
+  125  lsblk
+  126  du -sh /data
+  127  du -sh /etc
+  128  cat /etc/fstab
+  129  reboot
+  130  lsblk
+  131  mount -a
+  132  lsblk
+  133  lvs
+  134  lvremove /dev/vg_nit/lv_nit
+  135  lvs
+  136  history
+l

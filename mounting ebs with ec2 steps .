@@ -1,3 +1,28 @@
+lsblk
+    2  df -Th
+    3  pvcreate
+    4  yum install lvm2 -y
+    5  pvcreate
+    6  fdisk /dev/xvdf
+    7  pvcreate /dev/xvdf1 /dev/xvdf2
+    8  pvcreate /dev/xvdf
+    9  vgcreate niteesh /dev/xvdf
+   10  lvcreate -l 100%FREE -n storage niteesh
+   11  mkfs.xfs /dev/niteesh/storage
+   12  lsblk -f
+   13  blkid
+   14  vim /etc/fstab
+   15  mount -a
+   16  vim /etc/fstab
+   17  mkdir /niteesh
+   18  mount -a
+   19  lsblk
+   20  df -th
+   21  df -Th
+   22  history
+
+
+
 
 apt-get install lvm2 -y
 92  pvs

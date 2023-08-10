@@ -8,11 +8,9 @@ pvcreate /dev/xvdf
 vgcreate niteesh /dev/xvdf
 lvcreate -l 100%FREE -n storage niteesh
 mkfs.xfs /dev/niteesh/storage
-lsblk -f
+lsblk -f                                ( niteesh-storage xfs      ba428c28-6306-4a9c-8b1d-40010e7b6f73 )   
 blkid
-vim /etc/fstab
-mount -a
-vim /etc/fstab
+vim /etc/fstab                   (UUID=ba428c28-6306-4a9c-8b1d-40010e7b6f73     /niteesh           xfs    defaults,noatime  1   1)
 mkdir /niteesh
 mount -a
 lsblk

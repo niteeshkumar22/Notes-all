@@ -27,3 +27,11 @@ Reload privilege tables now? (Press y|Y for Yes, any other key for No) : y
 
 mysql -u root -p 
 
+###################################################################################################################
+
+CREATE USER 'user1'@'%' IDENTIFIED BY 'Mysql@123';
+GRANT ALL PRIVILEGES ON *.* TO 'user1'@'%';
+flush privileges;
+
+
+

@@ -33,5 +33,15 @@ CREATE USER 'user1'@'%' IDENTIFIED BY 'Mysql@123';
 GRANT ALL PRIVILEGES ON *.* TO 'user1'@'%';
 flush privileges;
 
+show databases;
 
+create database database_name;
+
+mysql -u user1 -p db_contact < /home/ec2-user/db_contact.sql
+
+mysqldump -u user1 -p db_contact > db_contact.sql
+
+############################################################################################################################
+
+select user,host from mysql.user;
 

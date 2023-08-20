@@ -1,0 +1,60 @@
+
+https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ami-store-restore.html
+
+
+#Store an AMI in an S3 bucket
+#To store an AMI (AWS CLI)
+#Use the create-store-image-task command. Specify the ID of the AMI and the name of the S3 bucket in which to store the AMI.
+
+aws ec2 create-store-image-task \
+    --image-id ami-1234567890abcdef0 \
+    --bucket myamibucket
+
+#Go to powershell and run the command. the expected output will be :-
+
+{
+  "ObjectKey": "ami-1234567890abcdef0.bin"
+}
+
+
+#To describe the progress of an AMI store task (AWS CLI)
+#Use the describe-store-image-tasks command.
+
+aws ec2 describe-store-image-tasks
+
+
+#expected output:-
+{
+  "AmiId": "ami-1234567890abcdef0",
+  "Bucket": "myamibucket",
+  "ProgressPercentage": 17,
+  "S3ObjectKey": "ami-1234567890abcdef0.bin",
+  "StoreTaskState": "InProgress",
+  "StoreTaskFailureReason": null,
+  "TaskStartTime": "2021-01-01T01:01:01.001Z"
+}
+
+
+
+#Restore an AMI from an S3 bucket
+#To restore an AMI (AWS CLI)
+#Use the create-restore-image-task command. Using the values for S3ObjectKey and Bucket from the describe-store-image-tasks output, specify the object key of the AMI and the name of the S3 bucket to which the AMI was copied. Also specify a name for the restored AMI. The name must be unique for AMIs in the Region for this account.
+
+#Note
+#The restored AMI gets a new AMI ID.
+
+
+aws ec2 create-restore-image-task \
+    --object-key ami-1234567890abcdef0.bin \
+    --bucket myamibucket \
+    --name "New AMI Name"
+
+
+#Expected output
+
+
+{
+   "ImageId": "ami-0eab20fe36f83e1a8"
+}
+
+now check the ami in aws console. 

@@ -1,1 +1,6 @@
+chmod -R 400 Virginia-office.pem
+ssh -i "virginia-office.pem" ec2-user@server-ip
 
+
+security group 
+tcp/943

@@ -1,0 +1,169 @@
+
+Project Report:
+ 
+Architecture of the above project:
+
+                                                          
+
+
+NFS-SERVER (PORT Number : 2049)    
+Public ip : 3.99.216.171
+	sudo service nfs-server start
+	mkdir /redhatdvd
+	Upload application files - contact.html , contact.php
+	netstat -tunpl | grep 2049
+	vim /etc/exports 
+
+	/redhatdvd    3.98.145.99/24(rw)
+
+	/redhatdvd    3.99.217.246/24(ro)
+
+	exportfs -r
+	cd redhatdvd
+	chmod -R 777 redhatdvd/
+	sudo service nfs-server status
+	showmount -e
+
+
+App1 : 
+	Httpd
+	Php
+	telnet
+	mkdir velocis
+	mount 3.99.216.171:/redhatdvd /velocis
+	showmount -e 3.99.216.171
+	Ls application files 
+	Cd /etc/httpd/conf/
+	cp -rf httpd.conf httpd.conf_backup   
+	vim /etc/httpd/conf/httpd.conf
+
+
+
+<Directory />
+    AllowOverride All
+    Require all denied
+</Directory>
+#
+# Note that from this point forward you must specifically allow
+# particular features to be enabled - so if something's not working as
+# you might expect, make sure that you have specifically enabled it
+# below.
+#
+#
+# DocumentRoot: The directory out of which you will serve your
+# documents. By default, all requests are taken from this directory, but
+# symbolic links and aliases may be used to point to other locations.
+#DocumentRoot "/velocis"
+# Relax access to content within /var/www.
+<Directory "/velocis">
+<Directory "/velocis">
+    AllowOverride All
+    # Allow open access:
+    Require all granted
+</Directory>
+
+# Further relax access to the default document root:
+<Directory "/velocis">
+    #
+    # Possible values for the Options directive are "None", "All",
+    # or any combination of:
+    #   Indexes Includes FollowSymLinks SymLinksifOwnerMatch ExecCGI MultiViews
+    #
+    # Note that "MultiViews" must be named *explicitly* --- "Options All"
+    # doesn't give it to you.
+    #
+    # The Options directive is both complicated and important.  Please see
+    # http://httpd.apache.org/docs/2.4/mod/core.html#options
+    # for more information.
+    #
+    Options Indexes FollowSymLinks
+
+    #
+    # AllowOverride controls what directives may be placed in .htaccess files.
+    # It can be "All", "None", or any combination of the keywords:
+    #   Options FileInfo AuthConfig Limit
+    #
+AllowOverride All
+
+
+                                
+	systemctl restart httpd     
+	 Vim contact.php and make connection with db.                                                  
+
+APP-2   
+	Httpd
+	Php
+	telnet
+	mkdir velocis
+	mount 3.99.216.171:/redhatdvd /velocis
+	showmount -e 3.99.216.171
+	Cd /etc/httpd/conf/
+	cp -rf httpd.conf httpd.conf_backup   
+	vim /etc/httpd/conf/httpd.conf
+
+
+
+<Directory />
+    AllowOverride All
+    Require all denied
+</Directory>
+#
+# Note that from this point forward you must specifically allow
+# particular features to be enabled - so if something's not working as
+# you might expect, make sure that you have specifically enabled it
+# below.
+#
+#
+# DocumentRoot: The directory out of which you will serve your
+# documents. By default, all requests are taken from this directory, but
+# symbolic links and aliases may be used to point to other locations.
+#DocumentRoot "/velocis"
+# Relax access to content within /var/www.
+<Directory "/velocis">
+<Directory "/velocis">
+    AllowOverride All
+    # Allow open access:
+    Require all granted
+</Directory>
+
+# Further relax access to the default document root:
+<Directory "/velocis">
+    #
+    # Possible values for the Options directive are "None", "All",
+    # or any combination of:
+    #   Indexes Includes FollowSymLinks SymLinksifOwnerMatch ExecCGI MultiViews
+    #
+    # Note that "MultiViews" must be named *explicitly* --- "Options All"
+    # doesn't give it to you.
+    #
+    # The Options directive is both complicated and important.  Please see
+    # http://httpd.apache.org/docs/2.4/mod/core.html#options
+    # for more information.
+    #
+    Options Indexes FollowSymLinks
+
+    #
+    # AllowOverride controls what directives may be placed in .htaccess files.
+    # It can be "All", "None", or any combination of the keywords:
+    #   Options FileInfo AuthConfig Limit
+    #
+AllowOverride All
+
+
+                                
+	systemctl restart httpd     
+
+
+DATABASE-1 :
+	Yum install mariadb 
+	Mysql_secure_installation
+	Mysql -u root -p
+	Create user ‘user1’@’%’ identified by ‘Mysql@123’;
+	Select user,host from mysql.user;
+	Grant all privileges on *.* to user1’@’%’;
+	Flush privileges;
+	Create database db_contact;
+	exit
+	Mysql -u root -p db_contact < /home/ec2-user/db_contact.sql
+	Make entries in app and check databases for entries.
+	                                                                                                                                                  

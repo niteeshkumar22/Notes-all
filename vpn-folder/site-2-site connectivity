@@ -1,6 +1,14 @@
+Launch Vm with image of openvpn from aws marketplace
+connect the vm and get the admin and client url
+connect with the url - user name and password is given in the connected vm .
+connect the client url and download the client vpn software and connect the vpn. 
+After successfully connected the vm . you can connect the private vm of the same network with out using public ip . 
+the condition is simple all the vm should be in same vpc network to access them with private ip . 
+
 chmod -R 400 Virginia-office.pem
 ssh -i "virginia-office.pem" ec2-user@server-ip
 
-
+allow the port number tcp/943 in private-server ec2 instance security group to ssh the vm
 security group 
 tcp/943
+

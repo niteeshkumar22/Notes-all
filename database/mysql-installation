@@ -1,0 +1,46 @@
+# mysql installation on rhel9 link 
+https://tecadmin.net/how-to-install-mysql-on-centos-9/
+
+# steps :
+wget https://repo.mysql.com//mysql80-community-release-el9-1.noarch.rpm 
+
+sudo dnf install mysql80-community-release-el9-1.noarch.rpm 
+
+sudo dnf install mysql-community-server
+
+
+sudo systemctl start mysqld
+
+grep 'A temporary password is generated' /var/log/mysqld.log | tail -1 
+(2023-02-07T07:56:14.276442Z 6 [Note] [MY-010454] [Server] A temporary password is generated for root@localhost: ZydSrO9cEw>9   )
+
+sudo mysql_secure_installation 
+
+Enter password for user root: [Enter temporary password]
+New password: [Enter a new password]
+Re-enter new password: [Re-enter new password]
+Change the password for root ? ((Press y|Y for Yes, any other key for No) : n
+Remove anonymous users? (Press y|Y for Yes, any other key for No) : y
+Disallow root login remotely? (Press y|Y for Yes, any other key for No) : y
+Remove test database and access to it? (Press y|Y for Yes, any other key for No) : y
+Reload privilege tables now? (Press y|Y for Yes, any other key for No) : y
+
+mysql -u root -p 
+
+###################################################################################################################
+
+CREATE USER 'user1'@'%' IDENTIFIED BY 'Mysql@123';
+GRANT ALL PRIVILEGES ON *.* TO 'user1'@'%';
+flush privileges;
+
+show databases;
+
+create database database_name;
+
+mysql -u user1 -p db_contact < /home/ec2-user/db_contact.sql
+
+mysqldump -u user1 -p db_contact > db_contact.sql
+
+############################################################################################################################
+
+select user,host from mysql.user;

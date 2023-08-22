@@ -1,0 +1,88 @@
+                 SSL certification :
+1.	create your domain name 
+2.	Go to sero ssl site 
+3.	Click on new certificate
+4.	Enter your domain name 
+5.	Click on 90 days for free certificate
+6.	Click on http file upload
+7.	Follow the below steps :
+
+Follow the steps below
+To verify your domain using HTTP File Upload, please follow the steps below:
+1.	Download your Auth File using the following link: Download Auth File
+2.	Upload the Auth File to your HTTP server under: /.well-known/pki-validation/
+3.	Make sure your file is available under the following link: http://niteesh.tk/.well-known/pki-validation/6E969CA001E5C2BDBF1D1EC9F29628BF.txt
+4.	Click "Next Step" to continue.
+
+8.	Make the directory with the same name as given above  and In the folder where your application code is uploaded.  (for-eg : /var/www/html/ )
+9.	    mkdir .well-known
+10.	cd .well-known
+11.	mkdir pki-validation
+12.	upload the downloaded file in pki-validation
+13.	then click on next step 
+14.	then click on verify domain . 
+15.	after verifying domain a zip folder is downloaded containing three files named as : 
+16.	 ca_bundle.crt   certificate.crt    private.key
+17.	
+18.	Now upload the files on the server on any location . 
+19.	Now try to locate ssl.conf or httpd.conf
+20.	Yum install locate    
+21.	yum install mod_ssl
+22.	locate ssl.conf
+23.	updatedb
+24.	locate ssl.conf
+25.	
+26.	vim /etc/httpd/conf.d/ssl.conf
+27.	if
+
+
+#   Point SSLCertificateFile at a PEM encoded certificate.  If
+#   the certificate is encrypted, then you will be prompted for a
+#   pass phrase.  Note that restarting httpd will prompt again.  Keep
+#   in mind that if you have both an RSA and a DSA certificate you
+#   can configure both in parallel (to also allow the use of DSA
+#   ciphers, etc.)
+#   Some ECC cipher suites (http://www.ietf.org/rfc/rfc4492.txt)
+#   require an ECC certificate which can also be configured in
+#   parallel.
+#SSLCertificateFile /etc/pki/tls/certs/localhost.crt
+SSLCertificateFile /home/ec2-user/certificate.crt
+
+#   Server Private Key:
+#   If the key is not combined with the certificate, use this
+#   directive to point at the key file.  Keep in mind that if
+#   you've both a RSA and a DSA private key you can configure
+#   both in parallel (to also allow the use of DSA ciphers, etc.)
+#   ECC keys, when in use, can also be configured in parallel
+#SSLCertificateKeyFile /etc/pki/tls/private/localhost.key
+SSLCertificateKeyFile /home/ec2-user/private.key
+
+Server Certificate Chain:
+#   Point SSLCertificateChainFile at a file containing the
+#   concatenation of PEM encoded CA certificates which form the
+#   certificate chain for the server certificate. Alternatively
+#   the referenced file can be the same as SSLCertificateFile
+#   when the CA certificates are directly appended to the server
+#   certificate for convenience.
+#SSLCertificateChainFile /etc/pki/tls/certs/server-chain.crt
+SSLCertificateChainFile /home/ec2-user/ca_bundle.crt
+
+
+
+1.	Edit the path in  where you have stored the file in  vim /etc/httpd/conf.d/ssl.conf
+2.	Eg : /home/ec2-user/ca_bundle.crt
+3.	I have stored the file in /home/ec2-user.
+
+4.	After changes in config file check the syntax by command :      httpd -t
+
+5.	httpd -t
+
+6.	syntax ok 
+
+7.	then check the status of the service .
+
+8.	then restart the service. 
+
+9.	Check the domain by adding https. If lock appears then ssl is applied on it . 
+
+

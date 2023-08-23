@@ -2,32 +2,48 @@
 
 Setup Physical PostgreSQL Replication on Ubuntu 22.04
 To demonstrate the replication process, you need a primary node and a replica node on which the replication will occur. Below is our lab setup and we are going to use Ubuntu 22.04 as the preferred operating system.
+
 Primary node: IP: 194.195.208.82 OS: Ubuntu 22.04 server
 Replica node: IP: 139.144.169.79 OS: Ubuntu 22.04 server
+
 #Step 1: Install PostgreSQL Server
 The first step is to install PostgreSQL on both Primary and Replica nodes. Take note that you need to install the same version of PostgreSQL on both nodes for logical replication to take place.
 At the time of writing this guide, the latest version of PostgreSQL is PostgreSQL 14.
 First, log in to your server via SSH and refresh the repositories.
+
 sudo apt update
+
 Next, install the PostgreSQL database server as follows.
+
 sudo apt install postgresql postgresql-contrib -y
+
 By default, the PostgreSQL daemon automatically runs once installed. You can verify this by using the command:
+
 sudo systemctl status postgresql
  
 The output below confirms that the PostgreSQL service is up and running.
 In addition, consider enabling the service to start on system startup as follows.
+
 sudo systemctl enable postgresql
+
 #Step 2: Configure Primary Node
 Next, log in to the primary node (194.195.208.82) as postgres user which is the default user that is created with every new PostgreSQL installation.
+
 sudo -u postgres psql
+
 You need to create a replication user that will be used to initiate the replication process from the primary node.
 Therefore, run the following command to create the replication user and assign replication privileges. In this command, replica_user is the replication user while P@ssword321 is the user’s password. Be sure to provide a strong password unlike the one we have used which is purely for demo purposes.
+
 CREATE ROLE replica_user WITH REPLICATION LOGIN PASSWORD 'P@ssword321';
  
 Then log out from the PostgreSQL prompt
+
 postgres-# \q
+
 Next, you need to make a few tweaks to the main configuration file. Use your preferred text editor to access the following configuration file:
+
 sudo vim /etc/postgresql/14/main/postgresql.conf
+
 With the file open, scroll down and locate the listen_addresses directive. The directive specifies the host under which the PostgreSQL database server listens for connections.
 Uncomment the directive by removing the # symbol and replace localhost with your server’s IP address enclosed in single quotation marks as shown: you can also use ‘*’  in listen_addresses.
  
@@ -40,16 +56,26 @@ Uncomment it and set it to on.
  
 That’s all for the changes needed in this configuration file. Save the changes and exit.
 Next, access the /etc/postgresql/14/main/pg_hba.conf configuration file.
+
 sudo vim /etc/postgresql/14/main/pg_hba.conf
+
 Append this line at the end of the configuration file. This allows the replica ( 139.144.169.79 ) to connect with the master node using the replica_user.
+
 host  replication   replica_user  139.144.169.79/24   md5
+
 Save the changes and close the file. The restart PostgreSQL service.
+
 sudo systemctl restart postgresql
+
 #Step 3: Configure Replica Node
 Before the replica node can start replicating data from the master node, you need to create a copy of the primary node’s data directory to the replica’s data directory. To achieve this, first, stop the PostgreSQL service on the replica node.
+
 sudo systemctl stop postgresql
+
 Next, remove all files in the replica’s data directory in order to start on a clean slate and make room for the primary node data directory.
+
 sudo su - postgres
+
 It will ask for postgres passwd then generate passwd for postgres and make it sudo user by making it entry in /etc/sudoers.
 
 sudo cp -r /var/lib/postgresql/14/main/ /var/lib/postgresql/14/main_old
@@ -59,27 +85,37 @@ sudo rm -rv /var/lib/postgresql/14/main/
 
 Again start the postgres else it will reflect the error. Use the command -- systemctl start postgresql and also check that you have open the 5432 port in security group of both the primary and secondary replication server.
 Now run the pg_basebackup utility as shown to copy data from the primary node to the replica node.
+
 sudo pg_basebackup -h 194.195.208.82 -U replica_user -X stream -C -S replica_1 -v -R -W -D /var/lib/postgresql/14/main/
 
 It will again ask for password this time you have to give replica_user password that you have granted while creating user. Check the password in primary postgres.
 Here is the output from running the replication command.
  
 Afterward, execute the following command on the replica to grant ownership of the data directory to the postgres user.
+
 sudo chown postgres -R /var/lib/postgresql/14/main/
+
 Now, start the PostgreSQL server. The replica will now be running in hot standby mode.
+
 sudo systemctl start postgresql
+
 #Step 4: Test The Replication Setup
 At this juncture, the primary node’s data directory has successfully been backed up on the replica and the replica started in a hot standby mode.
 The remaining part is to test out if the replication is working as intended. If the replica is successfully running in hot standby mode, then it should be connected to the primary database cluster on the primary server.
 To verify that the replica is connected to the primary node and that the primary is streaming, log into the primary server and switch to the postgres user.
+
 sudo -u postgres psql
+
 Next, query the pg_stat_replication table which contains vital information about the replication. In this command, we are retrieving information about the replica’s IP address and the state of the primary server.
+
 SELECT client_addr, state
 FROM pg_stat_replication;
  
 You should get the following output confirmation that your setup is working.
 To corroborate this, we are going to create a test database and add a table with a few records and then verify if the database has been replicated on the replica.
 we will create a sample database called students.
+
 CREATE DATABASE students_db;
+
 Next, switch to the database and check the secondary database. 
 

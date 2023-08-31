@@ -1,0 +1,43 @@
+Create and Attach Block Volume:
+
+Create a block volume in the OCI Console and note down its OCID.
+Attach the block volume to the instance you want to mount it on.
+Install Required Packages:
+Connect to your OCI instance and install the required packages:
+
+bash
+Copy code
+sudo apt-get update
+sudo apt-get install open-iscsi
+Discover and Connect to the Target:
+Run the following commands to discover the iSCSI targets and connect to the target:
+
+bash
+Copy code
+sudo iscsiadm -m discovery -t sendtargets -p <target_ip>
+sudo iscsiadm -m node -T <iqn_name> -p <target_ip> -l
+Replace <target_ip> with the IP address of the iSCSI target and <iqn_name> with the target's IQN (iSCSI Qualified Name).
+
+Check the Discovered Devices:
+You can check the newly discovered iSCSI devices using the lsblk command:
+
+bash
+Copy code
+lsblk
+Format and Mount the Volume:
+Format the iSCSI device using a filesystem of your choice. For example, to format it as ext4 and mount it:
+
+bash
+Copy code
+sudo mkfs.ext4 /dev/sdX   # Replace sdX with the appropriate device name
+sudo mkdir /mnt/myvolume
+sudo mount /dev/sdX /mnt/myvolume   # Replace sdX with the appropriate device name
+Update /etc/fstab (Optional but Recommended):
+To ensure the volume is mounted automatically after reboots, add an entry to the /etc/fstab file:
+
+bash
+Copy code
+echo "/dev/sdX /mnt/myvolume ext4 defaults 0 0" | sudo tee -a /etc/fstab   # Replace sdX and /mnt/myvolume with appropriate values
+Remember to replace placeholders like <target_ip>, <iqn_name>, sdX, and /mnt/myvolume with actual values that match your environment.
+
+Please exercise caution when making changes to your system, especially when working with storage devices and filesystems. Always have backups and double-check the commands you're executing.

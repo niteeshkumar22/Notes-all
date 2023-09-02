@@ -25,15 +25,16 @@ Format the iSCSI device using a filesystem of your choice. For example, to forma
 
 bash
 Copy code
-sudo mkfs.ext4 /dev/sdX   # Replace sdX with the appropriate device name
+sudo fdisk /dev/sdb
+sudo mkfs.ext4 /dev/sdb   # Replace sdX with the appropriate device name
 sudo mkdir /mnt/myvolume
-sudo mount /dev/sdX /mnt/myvolume   # Replace sdX with the appropriate device name
+sudo mount /dev/sdb /mnt/myvolume   # Replace sdX with the appropriate device name
 Update /etc/fstab (Optional but Recommended):
 To ensure the volume is mounted automatically after reboots, add an entry to the /etc/fstab file:
 
 bash
 Copy code
-echo "/dev/sdX /mnt/myvolume ext4 defaults 0 0" | sudo tee -a /etc/fstab   # Replace sdX and /mnt/myvolume with appropriate values
+echo "/dev/sdb /mnt/myvolume ext4 defaults 0 0" | sudo tee -a /etc/fstab   # Replace sdX and /mnt/myvolume with appropriate values
 Remember to replace placeholders like <target_ip>, <iqn_name>, sdX, and /mnt/myvolume with actual values that match your environment.
 
 Please exercise caution when making changes to your system, especially when working with storage devices and filesystems. Always have backups and double-check the commands you're executing.

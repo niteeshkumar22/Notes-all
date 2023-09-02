@@ -1,3 +1,27 @@
+fdisk -l
+fdisk /dev/sdc
+lsblk
+mkfs.ext4 /dev/sdc1
+mkdir /volume-2
+mount /dev/sdc1 /volume-2
+lsblk -f
+vim /etc/fstab
+
+UUID="29741581-9ab7-470a-a2a7-c13f262d49ae" /volume-1 ext4 defaults,noatime,_netdev 0 2
+
+UUID="a2a8fa9f-5163-4f7f-92f5-4fa4ef3b77ed" /volume-2 ext4 defaults,noatime,_netdev 0 2
+
+   cat /etc/fstab
+   lsblk
+     df -Th
+
+
+#####################################################################################################################
+
+
+
+
+
 #Create and Attach Block Volume:
 
 #Create a block volume in the OCI Console and note down its OCID.

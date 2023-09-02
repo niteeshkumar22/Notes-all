@@ -1,0 +1,64 @@
+sudo apt install s3fs awscli -y
+
+Step 1. Install s3fs on an OCI compute instance running Ubuntu
+SSH remotely into your Ubuntu server and run sudo apt update to update your system repository. Then type the command sudo apt install s3fs awscli -y to install S3fs on your system. To verify proper installation, run which s3fs and you should be able to see the path of the program.
+
+Note: refer to our other tutorials  on how to create and connect to cloud compute instance through Bastion host.
+
+ 
+
+Step 2. Create Bucket storage, Customer Secret Key and collect information needed for mounting
+Make sure you have created a bucket for your OCI account or refer to this link and create one.
+
+Go to the Oracle Cloud Infrastructure Web  Console, click the Profile icon in the top-right corner, and select User Settings. Then click Customer Secret Keys in the Resources section, and then click Generate Secret Key. Give the key a meaningful name (for example, fuse-secret-key), and then click Generate Secret Key. Copy and save the secret key because it won't be shown again. Then go back to the Buckets page and click the name of your Bucket to show details and find out the namespace of your bucket and the Data Region from Bucket OCID, e.g. ap-melbourne-1. By now, we should've collected the following details:
+
+bucket_name: My_Bucket
+
+Secret_Key: LIcM4Vcb7Io45k8VBpObHZSgy2TbBOT0uRBjpRHi9vk=
+
+Access_Key: 483b5fa7719923d55fef0901b3340d89c1767815
+
+Namespace: id4kj863dlvy
+
+OCI_Region_Name: ap-melbourne-1
+
+ 
+Step 3. Create a Password File
+Then in the remote SSH session, use vi, nano or another text editor to create a Password File and add Access_key:Secret_Key to the Password file, and set owner only permission.
+
+ubuntu@compute:~$ cat .passwd-s3fs
+
+483b5fa7719923d55fef0901b3340d89c1767815:LIcM4Vcb7Io45k8VBpObHZSgy2TbBOT0uRBjpRHi9vk=
+
+ubuntu@compute:~$ chmod 600 .passwd-s3fs
+
+ 
+
+Step 4. Mount Bucket storage as file system
+To mount the Bucket storage, use the following template and type command in the SSH session by replacing with your specific parameters.
+
+sudo s3fs <bucket_name> <local_path> -o endpoint=<oci_region_name> -o passwd_file=.passwd-s3fs -o url=https://<object_storage_namespace>.compat.objectstorage.<oci_region_name>.oraclecloud.com/ -onomultipart -o use_path_request_style -o allow_other
+
+As an example, based on the information collected above, the command line will be like this:
+
+sudo s3fs My_Bucket /home/ubuntu/my_bucket/ -o endpoint=ap-melbourne-1 -o passwd_file=.passwd-s3fs -o url=https://id2kj987dlvy.compat.objectstorage.ap-melbourne-1.oraclecloud.com -onomultipart -o use_path_request_style -o allow_other
+
+Then we can quickly check the mounting by typing df -h and you should be able to see the s3fs file system and the mounting point. Now you can operate the attached bucket storage like normal mounted drive.
+
+ 
+Step 5. Un-mounting the File System
+To unmount the File System, use the command fusermount and type the following in the command line interface.
+
+sudo fusermount -u /home/ubuntu/my_bucket
+
+If you encounter the error message of failing to unmount because the drive is busy, it's likely because there's file reading/writing in the web console. Log out from the console and run the unmount command.
+
+ 
+Step 6. Automount your Bucket
+After restarting the server, the mounted directories will disappear. If you would like to automount of the Bucket storage, you will need to modify the /etc/fstab file and add the following entry:
+
+s3fs#<bucket_name> /home/ubuntu/my_bucket fuse _netdev,allow_other 0 0
+
+
+
+

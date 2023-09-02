@@ -32,6 +32,9 @@ sudo mount /dev/sdb /mnt/myvolume   # Replace sdX with the appropriate device na
 Update /etc/fstab (Optional but Recommended):
 To ensure the volume is mounted automatically after reboots, add an entry to the /etc/fstab file:
 
+UUID="29741581-9ab7-470a-a2a7-c13f262d49ae" /volume-1 ext4 defaults,noatime,_netdev 0 2  (use this)
+
+
 bash
 Copy code
 echo "/dev/sdb /mnt/myvolume ext4 defaults 0 0" | sudo tee -a /etc/fstab   # Replace sdX and /mnt/myvolume with appropriate values

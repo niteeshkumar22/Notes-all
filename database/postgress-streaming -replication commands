@@ -1,4 +1,6 @@
-  Document for postgres streaming replication : 
+# Reference URL ---  https://www.cherryservers.com/blog/how-to-set-up-postgresql-database-replication#setup-physical-postgresql-replication-on-ubuntu-2204
+
+Document for postgres streaming replication : 
 
 Setup Physical PostgreSQL Replication on Ubuntu 22.04
 To demonstrate the replication process, you need a primary node and a replica node on which the replication will occur. Below is our lab setup and we are going to use Ubuntu 22.04 as the preferred operating system.

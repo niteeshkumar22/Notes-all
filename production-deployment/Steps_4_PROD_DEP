@@ -1,0 +1,64 @@
+# Production in Deployment in Rhel 9
+
+# First Step is to connect the Rhel server and update the server.
+yum update -y
+
+# Second Mandatory step is to check the firewalld status .
+systemctl status firewalld
+# if the firewalld status is active then disable it otherwise it will not let your application run and give u 403 error.
+
+#third Mandatory step is to check the Selinux status.
+[root@serverX ~]# getenforce
+Enforcing
+[root@serverX ~]# setenforce
+usage: setenforce [ Enforcing | Permissive | 1 | 0 ]
+[root@serverX ~]# setenforce 0
+[root@serverX ~]# getenforce
+Permissive
+[root@serverX ~]# setenforce Enforcing
+[root@serverX ~]# getenforce
+Enforcing
+# selinux status should be permissive to run the application. 
+
+# Fourth mandatory step is to change the hostname to hide your server private ip. command used to change the host name is : -
+hostnamectl set-hostname application-1
+# to check the hostname , command used is 
+hostname 
+# To refresh the kernel of linux the command used is : 
+bash
+# To check the version of kernel the command used is :
+uname -r
+# to check the ports the commands used is :
+netstat -tunlp
+# to check the rpm the command is :
+yum repolist
+# path of the repo is :
+cd /etc/yum.repos.d
+#to check the repos the command is 
+rpm -qa | grep httpd   # anythind that you have installed .
+# to search anything there is a command :
+find / -name httpd.conf   # httpd.conf is the file name that is searched through this command. 
+#there are many command which need to searched that is present in the os nor not . command used for that is 
+which
+# next step is to install the opensource repository for rhel that epel-repo to download the packages on rhel. the link is below :
+
+https://www.tecmint.com/install-epel-repo-rhel-9/#:~:text=What%20is%20EPEL%20Repository%3F,which%20also%20includes%20RHEL%209.
+
+# after installing rpel successfull you can install the webserver accordingly. for example 
+yum install httpd -y 
+systemctl status httpd
+systemctl enable httpd
+systemclt start httpd 
+systemctl status httpd
+
+#webserver httpd status should be active. 
+#check the port by netstat -tunlp . it will reflect the listening port of 80. 
+
+#now check the webserver is working or not by hitting the public ip. if the web server is not working . the things to be checked are :
+
+1. httpd service is active or not. ====== systemctl status httpd.
+2. firewalld service should be inactive === systemctl status firewalld ( make it inactive by systemctl stop firewalld).
+3. selinux service should be permissive == setenforce - setenforce 0 - getenforce - permissive.
+4. Also check the ports that is netstat -tunlp  . it will show the listening ports with the services running. if the port is not listening then. 
+5. Go to the console and go to the security group and add the port in inbound to open the port so that the service will start listening that port now.  
+

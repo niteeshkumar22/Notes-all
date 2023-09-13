@@ -1,1 +1,13 @@
-
+Create a file system.
+and find the mount commands according to the os.
+      sudo apt-get install nfs-common
+      sudo mkdir -p /mnt/FileSystem-20230913-0637-40
+      sudo mount 10.0.1.184:/FileSystem-20230913-0637-40 /mnt/FileSystem-20230913-0637-40
+      vim /etc/fstab
+    # 10.0.1.184:/FileSystem-20230913-0637-40 /mnt/FileSystem-20230913-0637-40 nfs defaults 0 0
+      10.0.1.184:/FileSystem-20230913-0637-40 /mnt/FileSystem-20230913-0637-40 nfs defaults 0 0
+:wq!
+mount -a
+ls /mnt/FileSystem-20230913-0637-40
+reboot
+######################permanent mount steps #########################

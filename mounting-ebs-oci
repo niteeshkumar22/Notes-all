@@ -1,3 +1,5 @@
+first run attach commands to attach the disk. find the commands in ebs which you created 
+
 fdisk -l
 fdisk /dev/sdc
 lsblk

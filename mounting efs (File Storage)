@@ -11,3 +11,7 @@ mount -a
 ls /mnt/FileSystem-20230913-0637-40
 reboot
 ######################permanent mount steps #########################
+
+scp Command To transfer the file from local to server.
+Niteesh$ scp -i ssh-key-2023-09-10.key rh124-9.0-student-guide.pdf ubuntu@141.148.195.115:/home/ubuntu
+

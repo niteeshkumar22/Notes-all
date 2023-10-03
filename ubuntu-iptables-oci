@@ -1,0 +1,32 @@
+
+https://docs.oracle.com/en-us/iaas/developer-tutorials/tutorials/apache-on-ubuntu/01oci-ubuntu-apache-summary.htm#set-up-apache-php
+###############################################################################################################################
+
+sudo iptables -I INPUT 6 -m state --state NEW -p tcp --dport 80 -j ACCEPT
+sudo netfilter-persistent save
+
+
+#############################################################################################################################
+ 53  sudo iptables -I INPUT 6 -m state --state NEW -p tcp --dport 80 -j ACCEPT
+   54  sudo netfilter-persistent save
+   55  sudo systemctl restart apache2 
+
+#############################################################################################################################
+
+Install Apache Server.
+Copy
+sudo apt update
+sudo apt -y install apache2
+Next start Apache.
+Copy
+sudo systemctl restart apache2
+Update firewall settings.
+The Ubuntu firewall is disabled by default. However, you still need to update your iptables configuration to allow HTTP traffic. Update iptables with the following commands.
+
+Copy
+sudo iptables -I INPUT 6 -m state --state NEW -p tcp --dport 80 -j ACCEPT
+sudo netfilter-persistent save
+The commands add a rule to allow HTTP traffic and saves the changes to the iptables configuration files.
+
+You can now test your server.
+You can test your server from the command line with curl localhost. Or, you can connect your browser to your public IP address assigned to your instance: http://<x.x.x.x>. The page looks similar to: Apache Server Test Page
